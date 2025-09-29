@@ -1,0 +1,456 @@
+# Git & GitHub Cheat Sheet
+
+## Git vs GitHub: What's the Difference?
+
+**Git** is a distributed version control system that runs locally on your computer. It tracks changes to your code and manages different versions of your project.
+
+**GitHub** is a cloud-based hosting service that lets you manage Git repositories online. It adds collaboration features like pull requests, issues, and project management tools on top of Git.
+
+Think of it this way: Git is the tool, GitHub is the platform that hosts your Git repositories and adds social/collaborative features.
+
+---
+
+## Essential Git Commands
+
+### Initial Setup
+
+```bash
+# Configure your identity
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Check your settings
+git config --list
+
+# Set default branch name to main
+git config --global init.defaultBranch main
+```
+
+### Starting a Repository
+
+```bash
+# Initialize a new Git repository
+git init
+
+# Clone an existing repository
+git clone <repository-url>
+
+# Clone a specific branch
+git clone -b <branch-name> <repository-url>
+```
+
+### Basic Workflow Commands
+
+```bash
+# Check status of your files
+git status
+
+# Add files to staging area
+git add <file-name>              # Add specific file
+git add .                        # Add all changes
+git add *.js                     # Add all JavaScript files
+
+# Commit changes
+git commit -m "Your commit message"
+
+# Add and commit in one step (tracked files only)
+git commit -am "Your commit message"
+
+# Push changes to remote repository
+git push origin <branch-name>
+
+# Pull latest changes from remote
+git pull origin <branch-name>
+
+# Fetch changes without merging
+git fetch origin
+```
+
+### Branching and Merging
+
+```bash
+# List all branches
+git branch                       # Local branches
+git branch -r                    # Remote branches
+git branch -a                    # All branches
+
+# Create a new branch
+git branch <branch-name>
+
+# Switch to a branch
+git checkout <branch-name>
+
+# Create and switch to a new branch
+git checkout -b <branch-name>
+
+# Switch branches (newer syntax)
+git switch <branch-name>
+git switch -c <branch-name>      # Create and switch
+
+# Merge a branch into current branch
+git merge <branch-name>
+
+# Delete a branch
+git branch -d <branch-name>      # Safe delete
+git branch -D <branch-name>      # Force delete
+
+# Delete remote branch
+git push origin --delete <branch-name>
+```
+
+### Viewing History and Changes
+
+```bash
+# View commit history
+git log
+git log --oneline                # Compact view
+git log --graph --oneline        # Visual branch graph
+git log -n 5                     # Last 5 commits
+
+# View changes
+git diff                         # Unstaged changes
+git diff --staged                # Staged changes
+git diff <branch1> <branch2>     # Compare branches
+
+# Show specific commit
+git show <commit-hash>
+
+# View file history
+git log -p <file-name>
+```
+
+### Undoing Changes
+
+```bash
+# Discard changes in working directory
+git checkout -- <file-name>
+git restore <file-name>          # Newer syntax
+
+# Unstage files
+git reset HEAD <file-name>
+git restore --staged <file-name> # Newer syntax
+
+# Undo last commit (keep changes)
+git reset --soft HEAD~1
+
+# Undo last commit (discard changes)
+git reset --hard HEAD~1
+
+# Revert a commit (creates new commit)
+git revert <commit-hash>
+
+# Amend last commit
+git commit --amend -m "New message"
+```
+
+### Stashing Changes
+
+```bash
+# Stash current changes
+git stash
+git stash save "Description"
+
+# List stashes
+git stash list
+
+# Apply most recent stash
+git stash apply
+
+# Apply and remove stash
+git stash pop
+
+# Apply specific stash
+git stash apply stash@{2}
+
+# Drop a stash
+git stash drop stash@{0}
+
+# Clear all stashes
+git stash clear
+```
+
+### Remote Repositories
+
+```bash
+# View remote repositories
+git remote -v
+
+# Add remote repository
+git remote add origin <url>
+
+# Change remote URL
+git remote set-url origin <new-url>
+
+# Remove remote
+git remote remove <remote-name>
+
+# Rename remote
+git remote rename <old-name> <new-name>
+```
+
+### Tagging
+
+```bash
+# List tags
+git tag
+
+# Create lightweight tag
+git tag <tag-name>
+
+# Create annotated tag
+git tag -a <tag-name> -m "Tag message"
+
+# Push tags to remote
+git push origin <tag-name>
+git push origin --tags            # Push all tags
+
+# Delete tag
+git tag -d <tag-name>             # Local
+git push origin --delete <tag-name> # Remote
+```
+
+---
+
+## GitHub-Specific Features
+
+### Working with Pull Requests
+
+```bash
+# Fetch PR to local branch
+git fetch origin pull/<PR-number>/head:<local-branch-name>
+
+# Check out PR for testing
+gh pr checkout <PR-number>  # Using GitHub CLI
+```
+
+### GitHub CLI Commands
+
+```bash
+# Install GitHub CLI first: https://cli.github.com/
+
+# Authenticate
+gh auth login
+
+# Create a repository
+gh repo create <repo-name>
+
+# Clone a repository
+gh repo clone <repo-name>
+
+# Create a pull request
+gh pr create
+
+# List pull requests
+gh pr list
+
+# View pull request
+gh pr view <PR-number>
+
+# Merge pull request
+gh pr merge <PR-number>
+
+# Create an issue
+gh issue create
+
+# List issues
+gh issue list
+```
+
+### Forking Workflow
+
+```bash
+# 1. Fork repository on GitHub (use website)
+
+# 2. Clone your fork
+git clone <your-fork-url>
+
+# 3. Add upstream remote (original repository)
+git remote add upstream <original-repo-url>
+
+# 4. Sync your fork with upstream
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+```
+
+---
+
+## Best Practices for Developers
+
+### Commit Messages
+
+**Write clear, descriptive commit messages:**
+- Use imperative mood: "Add feature" not "Added feature"
+- Keep first line under 50 characters
+- Add detailed description after blank line if needed
+- Reference issue numbers: "Fix #123: Resolve login bug"
+
+```
+Good: "Add user authentication with JWT"
+Bad: "updates" or "fix stuff"
+```
+
+### Branching Strategy
+
+**Use a consistent branching model:**
+- `main` or `master`: Production-ready code
+- `develop`: Integration branch for features
+- `feature/feature-name`: New features
+- `bugfix/bug-name`: Bug fixes
+- `hotfix/issue`: Urgent production fixes
+
+### Commit Frequency
+
+- Commit early and often with logical changes
+- Each commit should be a single logical change
+- Don't commit half-done work (use stash instead)
+- Test before committing when possible
+
+### Before Pushing
+
+```bash
+# Always pull before pushing to avoid conflicts
+git pull origin <branch-name>
+
+# Review your changes
+git diff origin/<branch-name>
+
+# Run tests
+# Then push
+git push origin <branch-name>
+```
+
+### Security Best Practices
+
+- Never commit sensitive data (passwords, API keys, secrets)
+- Use `.gitignore` to exclude sensitive files
+- Review changes before committing: `git diff --staged`
+- Use SSH keys or personal access tokens, not passwords
+- Enable two-factor authentication on GitHub
+
+### Collaboration Best Practices
+
+- Keep commits focused and atomic
+- Write meaningful commit messages
+- Create pull requests for code review
+- Review others' code thoroughly
+- Keep your local repository updated
+- Communicate with your team about major changes
+- Delete branches after merging
+- Use tags for releases
+
+### .gitignore Best Practices
+
+```bash
+# Create .gitignore file in repository root
+# Common exclusions:
+
+node_modules/
+.env
+.DS_Store
+*.log
+dist/
+build/
+.vscode/
+.idea/
+```
+
+### Handling Merge Conflicts
+
+```bash
+# 1. Pull latest changes
+git pull origin <branch-name>
+
+# 2. If conflicts occur, Git marks them in files
+# Edit files to resolve conflicts
+
+# 3. Stage resolved files
+git add <resolved-files>
+
+# 4. Complete the merge
+git commit
+
+# 5. Push changes
+git push origin <branch-name>
+```
+
+### Useful Aliases
+
+```bash
+# Add to ~/.gitconfig or use git config --global
+
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.last 'log -1 HEAD'
+git config --global alias.visual 'log --graph --oneline --all'
+```
+
+---
+
+## Quick Reference: Common Workflows
+
+### Starting a New Feature
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/new-feature
+# Make changes
+git add .
+git commit -m "Add new feature"
+git push origin feature/new-feature
+# Create PR on GitHub
+```
+
+### Fixing a Bug
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b bugfix/fix-issue
+# Fix the bug
+git add .
+git commit -m "Fix: resolve issue with..."
+git push origin bugfix/fix-issue
+# Create PR on GitHub
+```
+
+### Syncing Your Fork
+
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+```
+
+---
+
+## Troubleshooting Tips
+
+**Accidentally committed to wrong branch:**
+```bash
+git reset HEAD~1 --soft
+git stash
+git checkout correct-branch
+git stash pop
+git add .
+git commit -m "Your message"
+```
+
+**Need to undo a push:**
+```bash
+git revert <commit-hash>
+git push origin <branch-name>
+# Never use git push --force on shared branches!
+```
+
+**Merge conflict prevention:**
+- Pull frequently
+- Communicate with team
+- Keep branches short-lived
+- Merge main into feature branches regularly

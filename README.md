@@ -1,4 +1,6 @@
 This is my Readme file
 This is a change
 
-Changes by read-1
+
+This is merge solved by read-2 and read-1
+
